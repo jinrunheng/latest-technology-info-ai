@@ -1,1 +1,1 @@
-# latest-technology-info-ai
+# latest-technology-info-crawler-ai
