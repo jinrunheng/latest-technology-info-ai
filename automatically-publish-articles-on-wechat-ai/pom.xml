@@ -14,6 +14,7 @@
     </parent>
     <properties>
         <java.version>1.8</java.version>
+        <jupiter.version>5.9.2</jupiter.version>
     </properties>
     <dependencies>
         <dependency>
@@ -25,6 +26,10 @@
             <artifactId>spring-boot-starter-web</artifactId>
         </dependency>
         <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-test</artifactId>
+        </dependency>
+        <dependency>
             <groupId>com.squareup.okhttp3</groupId>
             <artifactId>okhttp</artifactId>
             <version>3.14.7</version>
@@ -34,10 +39,11 @@
             <artifactId>jsoup</artifactId>
             <version>1.16.2</version>
         </dependency>
+        <!--mysql connector-->
         <dependency>
-            <groupId>com.alibaba</groupId>
-            <artifactId>fastjson</artifactId>
-            <version>1.2.75</version>
+            <groupId>mysql</groupId>
+            <artifactId>mysql-connector-java</artifactId>
+            <version>8.0.16</version>
         </dependency>
         <!-- jackson -->
         <dependency>
@@ -60,6 +66,18 @@
             <artifactId>lombok</artifactId>
             <version>1.18.20</version>
         </dependency>
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter-api</artifactId>
+            <version>${jupiter.version}</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter-engine</artifactId>
+            <version>${jupiter.version}</version>
+            <scope>test</scope>
+        </dependency>
 
     </dependencies>
     <build>
@@ -71,6 +89,21 @@
                 <configuration>
                     <source>1.8</source>
                     <target>1.8</target>
+                </configuration>
+            </plugin>
+            <!--flyway for db test-->
+            <plugin>
+                <groupId>org.flywaydb</groupId>
+                <artifactId>flyway-maven-plugin</artifactId>
+                <version>5.2.4</version>
+                <configuration>
+                    <url>jdbc:mysql://localhost:3306/article_ai?useUnicode=true&amp;serverTimezone=Asia/Shanghai&amp;characterEncoding=utf8
+                    </url>
+                    <user>root</user>
+                    <password>123</password>
+                    <baselineOnMigrate>true</baselineOnMigrate>
+                    <placeholderReplacement>false</placeholderReplacement>
+                    <encoding>UTF-8</encoding>
                 </configuration>
             </plugin>
         </plugins>

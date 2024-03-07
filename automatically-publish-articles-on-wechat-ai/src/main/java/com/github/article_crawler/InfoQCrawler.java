@@ -1,6 +1,6 @@
 package com.github.article_crawler;
 
-import com.alibaba.fastjson.JSON;
+import com.github.utils.JsonUtils;
 import lombok.extern.slf4j.Slf4j;
 import okhttp3.*;
 import org.jsoup.Jsoup;
@@ -44,7 +44,7 @@ public class InfoQCrawler {
         MediaType mediaType = MediaType.parse("application/json; charset=utf-8");
         Map<String, Object> map = new HashMap<>();
         map.put("size", 30);
-        final String jsonString = JSON.toJSONString(map);
+        final String jsonString = JsonUtils.toJsonStringSafe(map);
         return RequestBody.create(mediaType, jsonString);
     }
 

@@ -1,27 +1,35 @@
-package com.github;
+package com.github.service;
 
-import com.alibaba.fastjson.JSON;
+import com.github.pojo.Message;
+import com.github.pojo.Messages;
+import com.github.utils.JsonUtils;
+import lombok.SneakyThrows;
 import okhttp3.*;
+import org.junit.jupiter.api.Test;
 
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.util.Collections;
 import java.util.Map;
 import java.util.Properties;
 
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
+
 /**
  * @Author Dooby Kim
- * @Date 2024/3/6 下午10:42
+ * @Date 2024/3/7 下午8:15
  * @Version 1.0
  */
-public class TestWenxinAPI {
-    private String apiKey;
-    private String secretKey;
-    static final OkHttpClient httpClient = new OkHttpClient().newBuilder().build();
+class WenxinAIServiceTest {
+    private static String apiKey;
+    private static String secretKey;
+    private static String keyPath = "src/test/resources/key.properties";
+    private static final OkHttpClient httpClient = new OkHttpClient().newBuilder().build();
 
-    private void initKey() {
+    private static void initKey() {
         Properties prop = new Properties();
 
-        try (FileInputStream input = new FileInputStream("wenxin-ai/src/main/resources/key.properties")) {
+        try (FileInputStream input = new FileInputStream(keyPath)) {
             // 从输入流加载属性列表
             prop.load(input);
             // 获取属性
@@ -32,7 +40,7 @@ public class TestWenxinAPI {
         }
     }
 
-    public String getAnswer(String content) throws IOException {
+    public static String getAnswer(String content) throws IOException {
         MediaType mediaType = MediaType.parse("application/json");
         RequestBody body = RequestBody.create(mediaType, content);
         String token = getAccessToken();
@@ -46,7 +54,7 @@ public class TestWenxinAPI {
         return string;
     }
 
-    public String getAccessToken() throws IOException {
+    public static String getAccessToken() throws IOException {
         MediaType mediaType = MediaType.parse("application/x-www-form-urlencoded");
         RequestBody body = RequestBody.create(mediaType, "grant_type=client_credentials&client_id=" + apiKey
                 + "&client_secret=" + secretKey);
@@ -56,15 +64,21 @@ public class TestWenxinAPI {
                 .addHeader("Content-Type", "application/x-www-form-urlencoded")
                 .build();
         Response response = httpClient.newCall(request).execute();
-        final Map<String, String> map = JSON.parseObject(response.body().string(), Map.class);
-        String token = map.get("access_token");
-        return token;
+        assert response.body() != null;
+        final Map<String, String> map = JsonUtils.fromJsonString(response.body().string(), Map.class);
+        return map.get("access_token");
     }
 
-    public static void main(String[] args) throws IOException {
-        TestWenxinAPI api = new TestWenxinAPI();
-        api.initKey();
-        final String answer = api.getAnswer("{\"messages\":[{\"role\":\"user\",\"content\":\"你好\"}]}");
-        System.out.println(answer);
+    @SneakyThrows
+    @Test
+    public void testApi() {
+        initKey();
+        Message message = new Message();
+        message.setRole("user");
+        message.setContent("你好");
+        Messages messages = new Messages();
+        messages.setMessages(Collections.singletonList(message));
+        final String jsonString = JsonUtils.toJsonStringSafe(messages);
+        assertDoesNotThrow(() -> getAnswer(jsonString));
     }
 }

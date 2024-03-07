@@ -9,8 +9,8 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
  * @Version 1.0
  */
 @SpringBootApplication
-public class WenxinApplication {
+public class AutomaticallyPublishArticlesApplication {
     public static void main(String[] args) {
-        SpringApplication.run(WenxinApplication.class, args);
+        SpringApplication.run(AutomaticallyPublishArticlesApplication.class, args);
     }
 }

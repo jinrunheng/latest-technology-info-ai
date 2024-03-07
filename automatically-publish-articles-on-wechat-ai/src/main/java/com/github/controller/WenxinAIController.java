@@ -27,7 +27,6 @@ public class WenxinAIController {
 
     @PostMapping("/chat")
     public String chat(@RequestBody Messages messages) {
-        // final String jsonString = JSON.toJSONString(messages);
         final String jsonString = JsonUtils.toJsonStringSafe(messages);
         String answer = null;
         try {

@@ -1,6 +1,6 @@
 package com.github.service;
 
-import com.alibaba.fastjson.JSON;
+import com.github.utils.JsonUtils;
 import lombok.extern.slf4j.Slf4j;
 import okhttp3.*;
 import org.springframework.beans.factory.annotation.Value;
@@ -52,9 +52,9 @@ public class WenxinAIService {
                 .addHeader("Content-Type", "application/x-www-form-urlencoded")
                 .build();
         Response response = httpClient.newCall(request).execute();
-        final Map<String, String> map = JSON.parseObject(response.body().string(), Map.class);
-        String token = map.get("access_token");
-        return token;
+        assert response.body() != null;
+        final Map<String, String> map = JsonUtils.fromJsonString(response.body().string(), Map.class);
+        return map.get("access_token");
     }
 
 }
