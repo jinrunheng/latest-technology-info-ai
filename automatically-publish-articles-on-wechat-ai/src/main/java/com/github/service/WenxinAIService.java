@@ -38,8 +38,8 @@ public class WenxinAIService {
                 .addHeader("Content-Type", "application/json")
                 .build();
         Response response = httpClient.newCall(request).execute();
-        final String string = response.body().string();
-        return string;
+        final Map<String, Object> map = JsonUtils.fromJsonString(response.body().string(), Map.class);
+        return (String) map.get("result");
     }
 
     public String getAccessToken() throws IOException {
