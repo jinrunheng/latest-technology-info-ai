@@ -12,5 +12,5 @@ CREATE TABLE `article_ai`.`test`
     publish_date   DATETIME     NOT NULL COMMENT '文章发布时间',
     update_time    DATETIME     NOT NULL COMMENT '更新时间',
     PRIMARY KEY (id)
-) COMMENT = '轮播图 ';
+) COMMENT = 'test table';
 

@@ -103,6 +103,7 @@
     </dependencies>
     <build>
         <plugins>
+            <!--maven compile plugin-->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
@@ -112,7 +113,7 @@
                     <target>1.8</target>
                 </configuration>
             </plugin>
-            <!--flyway for db test-->
+            <!--flyway plugin for db test-->
             <plugin>
                 <groupId>org.flywaydb</groupId>
                 <artifactId>flyway-maven-plugin</artifactId>
@@ -126,6 +127,12 @@
                     <placeholderReplacement>false</placeholderReplacement>
                     <encoding>UTF-8</encoding>
                 </configuration>
+            </plugin>
+            <!--sonar for check code-->
+            <plugin>
+                <groupId>org.sonarsource.scanner.maven</groupId>
+                <artifactId>sonar-maven-plugin</artifactId>
+                <version>3.3.0.603</version>
             </plugin>
         </plugins>
     </build>
