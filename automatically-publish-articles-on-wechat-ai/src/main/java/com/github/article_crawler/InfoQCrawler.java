@@ -1,11 +1,10 @@
-package com.github;
+package com.github.article_crawler;
 
 import com.alibaba.fastjson.JSON;
 import lombok.extern.slf4j.Slf4j;
 import okhttp3.*;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
-import org.jsoup.nodes.Element;
 
 import java.io.IOException;
 import java.util.HashMap;
@@ -62,9 +61,5 @@ public class InfoQCrawler {
         map.put("User-Agent", "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36");
 
         return Headers.of(map);
-    }
-
-    public static void main(String[] args) {
-        crawler();
     }
 }
