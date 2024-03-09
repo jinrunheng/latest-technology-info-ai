@@ -1,5 +1,8 @@
 package com.github.service;
 
+import com.github.component.RedisOperator;
+import com.github.enums.RedisKeyEnum;
+import com.github.enums.TimeOutEnum;
 import com.github.utils.JsonUtils;
 import lombok.extern.slf4j.Slf4j;
 import okhttp3.*;
@@ -9,6 +12,7 @@ import org.springframework.stereotype.Service;
 import javax.annotation.Resource;
 import java.io.IOException;
 import java.util.Map;
+import java.util.Objects;
 
 
 /**
@@ -29,11 +33,26 @@ public class WenxinAIService {
     @Resource
     private OkHttpClient httpClient;
 
+    @Resource
+    private RedisOperator redisOperator;
+
+    private static final String wenxinToken = RedisKeyEnum.wenxin_token.key;
+
     public String getAnswer(String content) throws IOException {
         MediaType mediaType = MediaType.parse("application/json");
         RequestBody body = RequestBody.create(mediaType, content);
+        String token;
+        if (Objects.isNull(redisOperator.get(wenxinToken))) {
+            token = getAccessToken();
+            // 存储到 redis 中
+            redisOperator.set(wenxinToken, token);
+            redisOperator.setExpire(wenxinToken, TimeOutEnum.TEN_DAYS.timeout); // 10 天
+        } else {
+            token = redisOperator.get(RedisKeyEnum.wenxin_token.key);
+        }
+
         Request request = new Request.Builder()
-                .url("https://aip.baidubce.com/rpc/2.0/ai_custom/v1/wenxinworkshop/chat/completions?access_token=" + getAccessToken())
+                .url("https://aip.baidubce.com/rpc/2.0/ai_custom/v1/wenxinworkshop/chat/completions?access_token=" + token)
                 .method("POST", body)
                 .addHeader("Content-Type", "application/json")
                 .build();
