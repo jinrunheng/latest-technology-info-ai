@@ -1,8 +1,10 @@
 package com.github.article_crawler;
 
-import com.github.utils.JsonUtils;
 import lombok.extern.slf4j.Slf4j;
-import okhttp3.*;
+import okhttp3.Headers;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.Response;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 
@@ -12,21 +14,21 @@ import java.util.Map;
 
 /**
  * @Author Dooby Kim
- * @Date 2024/3/4 下午10:55
+ * @Date 2024/3/10 下午1:53
  * @Version 1.0
- * @Desc 爬取 InfoQ 文章
+ * @Desc 爬取阮一峰科技爱好者周刊文章（每周五发布）；link：https://www.ruanyifeng.com/blog/
  */
 @Slf4j
-public class InfoQCrawler {
+public class RyfArticleCrawler2 {
+    private static final String url = "https://www.ruanyifeng.com/blog/";
 
     public static void crawler() {
         OkHttpClient httpClient = new OkHttpClient.Builder().build();
-        String url = "https://www.infoq.cn/public/v1/my/recommond";
         Request request = new Request.Builder()
                 .url(url)
                 .headers(getHeaders())
-                .post(getRequestBody())
                 .build();
+
         try {
             Response response = httpClient.newCall(request).execute();
             assert response.body() != null;
@@ -39,14 +41,7 @@ public class InfoQCrawler {
             log.error("error", e);
         }
 
-    }
 
-    private static RequestBody getRequestBody() {
-        MediaType mediaType = MediaType.parse("application/json; charset=utf-8");
-        Map<String, Object> map = new HashMap<>();
-        map.put("size", 30);
-        final String jsonString = JsonUtils.toJsonStringSafe(map);
-        return RequestBody.create(mediaType, jsonString);
     }
 
     private static Headers getHeaders() {
@@ -56,11 +51,12 @@ public class InfoQCrawler {
         // map.put("Accept-Encoding", "gzip, deflate, br, zstd"); 需要注释掉，否则会引起乱码
         map.put("Accept-Language", "zh-CN,zh;q=0.9");
         map.put("Content-Type", "application/json; charset=utf-8");
-        map.put("Host", "www.infoq.cn");
-        map.put("Origin", "https://www.infoq.cn");
-        map.put("Referer", "https://www.infoq.cn/");
         map.put("User-Agent", "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36");
 
         return Headers.of(map);
+    }
+
+    public static void main(String[] args) {
+        crawler();
     }
 }

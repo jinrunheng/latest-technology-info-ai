@@ -105,6 +105,12 @@
             <artifactId>swagger-bootstrap-ui</artifactId>
             <version>1.6</version>
         </dependency>
+        <!--github api-->
+        <dependency>
+            <groupId>org.kohsuke</groupId>
+            <artifactId>github-api</artifactId>
+            <version>1.95</version>
+        </dependency>
     </dependencies>
     <build>
         <plugins>
