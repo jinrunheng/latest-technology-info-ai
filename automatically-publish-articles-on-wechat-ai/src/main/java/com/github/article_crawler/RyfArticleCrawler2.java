@@ -7,9 +7,12 @@ import okhttp3.Request;
 import okhttp3.Response;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Node;
+import org.jsoup.select.Elements;
 
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -34,7 +37,15 @@ public class RyfArticleCrawler2 {
             assert response.body() != null;
             String html = response.body().string();
             Document document = Jsoup.parse(html);
+            // <div id="content-inner">
+            // asset-header
+            // asset-name
             log.info(html);
+            final Elements elementsByClass = document.getElementsByClass("asset-name");
+            final List<Node> nodes = elementsByClass.get(0).childNodes();
+            final String href = nodes.get(0).attributes().get("href");
+            // 爬取文章 uri
+            log.info("url", url);
             log.info(document.title());
 
         } catch (IOException e) {

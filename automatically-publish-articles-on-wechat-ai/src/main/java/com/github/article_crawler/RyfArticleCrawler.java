@@ -42,6 +42,7 @@ public class RyfArticleCrawler {
                 break;
             }
         }
+        log.info("recentArticleCommit", recentArticleCommit);
         recentArticleCommit.getFiles().forEach(file -> {
             final URL blobUrl = file.getBlobUrl();
             log.info("blobUrl", blobUrl);
